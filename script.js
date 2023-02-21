@@ -1,114 +1,111 @@
-/* 
+//Saludo
 
-Arrays -> Base de datos de nuestros productos // Carrito creado por el user
-Funciones -> Mostrar productos en pantalla // El usuario agregue productos a su carrito
-Objetos -> Productos que vendemos (Cafe, 100p, 20stock) // Productos agregados al carrito (Cafe, 1u )
-Clases -> instanciar objetos
+function saludoGenerico() {
+    alert("Bienvenido a Zasa Arte");
+}
 
-*/
+saludoGenerico();
+
+//Saludo especifico
+
+let nombreUsuario = prompt("Cual es su nombre?")
+alert(`${nombreUsuario},elija una de las siguientes opciones:`)
+
+let categorias=[{
+	codigo:1,
+	nombre:"Impresión",
+	subcategorias:null
+},
+{
+	codigo:2,
+	nombre:"Ilustración",
+	subcategorias:null
+},
+{
+	codigo:3,
+	nombre:"Técnica Artística",
+	subcategorias:[{codigo:1, nombre:"Óleo sobre lienzo"},{codigo:2, nombre:"Acrilico"},{codigo:3, nombre:"Acuarela"}]
+}]
 
 
-//Class moldeador de objetos productos
+function preguntar(){
+	var codigo=parseInt(prompt(`Escriba el numero de la tecnica que quiera elegir: 1)Impresion , 2)Ilustración y 3)Técnica Artística`))
+	if ((codigo == 1) || (codigo==2) || (codigo==3)){
+		let categoria = categorias.filter(function(element){
+return element.codigo == codigo;
+		});
+		console.log(categoria)
+		alert(`usted ha elegido ${categoria[0].codigo} : ${categoria[0].nombre}`)
+
+		if(categoria[0].subcategorias){
+			let tecnica = parseInt(prompt("Escriba el numero de la tecnica que quiera elegir: 1)Óleo sobre lienzo, 2) Acrilico ó 3) Acuarela"))
+			const subcategoria = categoria[0].subcategorias.filter(function(element){
+return element.codigo == tecnica;
+			});
+console.log(subcategoria)
+			alert(`Usted ha elegido la técnica artística ${subcategoria[0].codigo}: ${subcategoria[0].nombre}`)
+		}
+		
+	}else{
+		alert("Ingrese un valor VÁLIDO")
+		preguntar()
+	}
+
+}
+
+preguntar()
+
+//Elija dimensiones
+
+let dimensionesProducto = prompt("Escriba la dimensión para producto elegido, por ejemplo: 50 x 70 cm")
+		alert (`Las dimensiones de producto, sera de ${dimensionesProducto}`)
+		console.log (dimensionesProducto);
 
 class Producto{
-    constructor(id, nombre, precio, stock, imagen){
-        this.id = id;
-        this.nombre = nombre;
-        this.precio = precio;
-        this.stock = stock;
-        this.imagen = imagen
-    }
-    restaStock(){
-        this.stock = this.stock - 1
-        console.log(`el stock de ${this.nombre} ha sido actualizado`)
-    }
+	constructor (nombre, dimesiones,cantidad,precio){
+		this.nombre=nombre;
+		this.dimesiones=dimesiones;
+		this.cantidad=cantidad;
+		this.precio=precio;
+	}
 }
 
-//Instanciar (Crear) productos objetos
+const nombre = new Producto ();
+const dimensiones = new Producto (`${dimensionesProducto}`);
+const cantidad = new cantidad ();
+const precio = new precio ();
 
-const producto0 = new Producto(0, 'CuadroÓleo', 2000, 1, 'CuadroÓleo.jpg')
-const producto1 = new Producto(1, 'CuadroAcrilico', 1500, 1, 'CuadroAcrilico.jpg');
-const producto2 = new Producto(2, 'Ilustración', 1000, 1, 'Ilustración.jpg');
-const producto3 = new Producto(3, 'Impresión', 250, 100, 'ImpresionVinilo.jpg');
+const arrayProductos = [nombre, dimensiones, cantidad, precio];
 
-const productos = [producto0, producto1, producto2]
+const contenedorProductos = document.getElementById("contenedorProductos")
 
-//agregar un producto
-productos.push(producto3)
+arrayProductos.forEach(producto => {
+	const div = document.createElement("div");
+	div.innerHTML= `<p> Nombre: ${producto.nombre}</p>
+					<p> Dimensiones: ${producto.dimensiones}</p>
+					<p> Cantidad: ${producto.cantidad}</p>
+					<p> Precio: ${producto.precio}</p>
+					<button> Agregar al carrito </button>`;
+					contenedorProductos.appendChild(div);
+})
 
-//Funcion para insertar Cards con información en DOM
-const cardComun = (listaStock) => {
-    for (elem of listaStock){
-        let card = document.createElement("div") //<div> </div>
-        card.innerHTML = `<h2> Comprá ${elem.nombre} </h2> 
-                    <input type="button" value="comprame" onclick="elem.restaStock()">`
-        document.body.append(card)
-    }
-}
-//cardComun(productos)
 
-const cardBoostrap = (listaStock) => {
-    for (arte of listaStock){
-        let card = document.createElement("div")
-        card.innerHTML = `
-        <div class="card" style="width: 18rem;">
-        <img src="./img/${arte.imagen}" class="card-img-top" alt="Acá va la imagen de ${arte.nombre}">
-        <div class="card-body">
-        <h5 class="card-title">${arte.nombre}</h5>
-        <p class="card-text">Llevatelo por tan solo ${arte.precio}</p>
-        <input type="button" onclick="agregaCarrito(${arte.id})" class="btn btn-primary" value="Compra ya, sólo quedan ${arte.stock}">
-        </div>
-    </div>`
-        document.body.append(card)
-    }
+
+/* function compraProducto(funcion()){
+
 }
 
-cardBoostrap(productos)
+function compraProducto(){
+	return funcion()
+} */
+	
+/* for (let i = 1; i <1; i++){
+
+} */
 
 
-const arrayCarrito = []
 
-class ObjCarrito{
-    constructor(producto, cant) {
-        this.producto = producto;
-        this.cantidad = cant
-    }
-    sumaStock(){
-        this.cantidad = this.cantidad + 1
-    }
-}
-function agregaCarrito(prod){
-    let existeEnCarrito = arrayCarrito.find(arte => arte.producto == prod)
-    
-    if (existeEnCarrito != undefined){
-        let posicion = arrayCarrito.findIndex(elem => elem.producto == existeEnCarrito.producto)
-        arrayCarrito[posicion].sumaStock()
-        console.table(arrayCarrito)
 
-    } else { 
-        const alCarrito = new ObjCarrito(prod, 1)
-        arrayCarrito.push(alCarrito)
-        console.table(arrayCarrito)
-    }
-}
 
-function verCarrito() {
-    document.body.innerHTML = ``
-
-    for (item of arrayCarrito) {
-        let card = document.createElement("div")
-    } let datosProd = productos.find(elem => elem.id == item.producto)
-    
-    card.innerHTML = `<div class="card" style="width: 18rem;">
-            <img src="./img/${datosProd.imagen}" class="card-img-top" alt="Acá va la imagen de ${datosProd.nombre}">
-            <div class="card-body">
-            <h5 class="card-title">Llevas ${datosProd.nombre}</h5>
-            <p class="card-text">Te llevas ${item.cantidad} unidades</p>
-            </div>
-            </div>`
-        document.body.append(card)
-        
-    
-}
 
 
